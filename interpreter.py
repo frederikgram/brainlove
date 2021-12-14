@@ -20,6 +20,9 @@ ignores: List[str] = ['\n', ' ', ':', '']
 # Valid Brain(fuck/love) operations
 operations: List[str] = ['<', '>', '+', '-', '.', ',', '[', ']']
 
+# Macro-specific operations
+macro_operations: List[str] = ['%', '#', ':']
+
 
 def lexer(source: str) -> List[str]:
     """ Given a source input, convert it to a 
@@ -28,45 +31,56 @@ def lexer(source: str) -> List[str]:
 
     tokens: List[str] = list()
 
-    def eat(index, delim) -> Tuple[int, str]:
+    def eat(cursor, delim) -> Tuple[int, str]:
         buffer: str = ""
     
-        while((c := source[index]) != delim):
+        while((c := source[cursor]) != delim):
             buffer += c
-            index += 1
+            cursor += 1
     
-        return index, buffer
+        return cursor + 1, buffer
 
-    def eat_macro_name(index) -> Tuple[int, str]:
+    def eat_macro_name(cursor) -> Tuple[int, str]:
         buffer: str = ""
-        while(True):
-            if source[index] in ignores + operations:
-                break
-    
-            buffer += source[index]
-            index += 1
+        while(source[cursor] not in ignores \
+          and source[cursor] not in operations \
+          and source[cursor] != ':'):
 
-        return index, buffer
+            buffer += source[cursor]
+            cursor += 1
+
+        return cursor, buffer
 
     cursor: int = 0
     while (cursor < len(source)):
 
-        if cursor + 5 < len(source) and source[cursor:cursor + 5] == 'macro':
-            cursor, macro_name = eat(cursor + 6, ':')
+        # Start of macro definition
+        if source[cursor] == '%':
+            cursor, macro_name = eat(cursor + 1, '%')
             
-            while(cursor < len(source) and (c := source[cursor]) != 'e'):
-                if c not in ignores:
-                    macros[macro_name].append(c)
-                cursor += 1
+            # Store the body of the macro
+            while(source[cursor] != '#'):
+                if source[cursor] in ignores:
+                    cursor += 1
+                    continue
 
-            # Skip over "end:"
-            cursor += 4
+                # Nested Macro
+                if source[cursor] not in operations:            
+                    cursor, nested_macro_name = eat_macro_name(cursor)
+                    macros[macro_name].extend(macros[nested_macro_name])
 
-        elif source[cursor] not in operations:  
+                # Normal Operation
+                else: 
+                    macros[macro_name].append(source[cursor])
+                    cursor += 1
+
+        # Macro as Operation
+        elif source[cursor] not in operations:
             cursor, macro_name = eat_macro_name(cursor)
             tokens.extend(macros[macro_name])
             
-        elif source[cursor] in operations:
+        # Normal Operation
+        if source[cursor] in operations:
             tokens.append(source[cursor])
 
         cursor += 1
@@ -83,38 +97,46 @@ def interpreter(tokens: List[str]) -> DefaultDict[int, int]:
     loop_stack: Final[List[int]] = list()
     pointer: int = 0
 
-    index: int = 0
-    while index < len(tokens):
+    cursor: int = 0
+    while cursor < len(tokens):
     
-        if tokens[index] == '[':    
-            loop_stack.append(index)
+        # The following if-elif clauses
+        # could be either converted into
+        # case-matching in later versions of
+        # python, or into a dictionary where
+        # the value stored is a callable that
+        # would mutate a given state
+        # but this is for simplicity's sake
+
+        if tokens[cursor] == '[':    
+            loop_stack.append(cursor)
         
             if heap[pointer] == 0:
-                while ((c := tokens[index]) != ']'): index += 1
+                while ((c := tokens[cursor]) != ']'): index += 1
 
-        elif tokens[index] == ']':
+        elif tokens[cursor] == ']':
             if heap[pointer] != 0:
-                index = loop_stack.pop() - 1
+                cursor = loop_stack.pop() - 1
 
-        elif tokens[index] == '<':
+        elif tokens[cursor] == '<':
             pointer -= 1
 
-        elif tokens[index] == '>':
+        elif tokens[cursor] == '>':
             pointer += 1
 
-        elif tokens[index] == '+':
+        elif tokens[cursor] == '+':
             heap[pointer] += 1
 
-        elif tokens[index] == '-':
+        elif tokens[cursor] == '-':
             heap[pointer] -= 1
 
-        elif tokens[index] == '.':
+        elif tokens[cursor] == '.':
             print(heap[pointer])
 
-        elif tokens[index] == ',':
+        elif tokens[cursor] == ',':
             heap[pointer] = int(input(">:"))
     
-        index += 1
+        cursor += 1
     
     return heap
 
@@ -128,6 +150,7 @@ if __name__ == "__main__":
     
     source = source.read()
     tokens = lexer(source)
+    print(tokens)
     heap = interpreter(tokens)
 
 
