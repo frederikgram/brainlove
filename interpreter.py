@@ -51,10 +51,10 @@ def lexer(source: str) -> List[str]:
     cursor: int = 0
     while (cursor < len(source)):
 
-        if source[cursor:cursor + 5] == 'macro':
+        if cursor + 5 < len(source) and source[cursor:cursor + 5] == 'macro':
             cursor, macro_name = eat(cursor + 6, ':')
             
-            while((c := source[cursor]) != 'e'):
+            while(cursor < len(source) and (c := source[cursor]) != 'e'):
                 if c not in ignores:
                     macros[macro_name].append(c)
                 cursor += 1
