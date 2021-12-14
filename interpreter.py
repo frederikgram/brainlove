@@ -62,10 +62,13 @@ def lexer(source: str) -> List[str]:
             while(source[cursor] != '#'):
                 if source[cursor] in ignores:
                     cursor += 1
-                    continue
+
+                elif source[cursor] == '%':
+                    print("Invalid Macro Body: Cannot put a macro-definition inside of the body of another macro, position: ", cursor)
+                    sys.exit(-1)
 
                 # Nested Macro
-                if source[cursor] not in operations:            
+                elif source[cursor] not in operations:            
                     cursor, nested_macro_name = eat_macro_name(cursor)
                     macros[macro_name].extend(macros[nested_macro_name])
 
@@ -112,7 +115,7 @@ def interpreter(tokens: List[str]) -> DefaultDict[int, int]:
             loop_stack.append(cursor)
         
             if heap[pointer] == 0:
-                while ((c := tokens[cursor]) != ']'): index += 1
+                while ((c := tokens[cursor]) != ']'): cursor += 1
 
         elif tokens[cursor] == ']':
             if heap[pointer] != 0:
@@ -134,7 +137,8 @@ def interpreter(tokens: List[str]) -> DefaultDict[int, int]:
             print(heap[pointer])
 
         elif tokens[cursor] == ',':
-            heap[pointer] = int(input(">:"))
+            intake = input(">:  ")
+            heap[pointer] = int(intake) if intake.isdigit() else ord(intake)
     
         cursor += 1
     
@@ -152,5 +156,6 @@ if __name__ == "__main__":
     tokens = lexer(source)
     print(tokens)
     heap = interpreter(tokens)
+    print(heap)
 
 
