@@ -1,9 +1,9 @@
-%sub10%----------#
-%toUpper%
-:sub10:
-:sub10:
-:sub10:
+łsub10%----------#
+łtoUpper%
+ŋsub10ð
+ŋsub10ð
+ŋsub10ð
 --
 #
 ,>,>,>,>,
-[toUpper<]
+[ŋtoUpperð<]

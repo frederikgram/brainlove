@@ -21,7 +21,7 @@ ignores: List[str] = ['\n', ' ', ':', '']
 operations: List[str] = ["<", ">", "+", "-", ".", ",", "[", "]"]
 
 # Macro-specific operations
-macro_operations: List[str] = ["%", "#", ":"]
+macro_operations: List[str] = ['ł','%','#','ŋ', 'ð']
 
 
 def preprocessor(source: str) -> List[str]:
@@ -46,7 +46,7 @@ def preprocessor(source: str) -> List[str]:
         while (
             source[cursor] not in ignores
             and source[cursor] not in operations
-            and source[cursor] != ":"
+            and source[cursor] != "ð"
         ):
 
             buffer += source[cursor]
@@ -58,7 +58,7 @@ def preprocessor(source: str) -> List[str]:
     while cursor < len(source):
 
         # Start of macro definition
-        if source[cursor] == "%":
+        if source[cursor] == "ł":
             cursor, macro_name = eat(cursor + 1, "%")
 
             # Store the body of the macro
@@ -66,7 +66,7 @@ def preprocessor(source: str) -> List[str]:
                 if source[cursor] in ignores:
                     cursor += 1
 
-                elif source[cursor] == "%":
+                elif source[cursor] == "ł":
                     print(
                         "Invalid Macro Body: Cannot put a macro-definition inside of the body of another macro, position: ",
                         cursor,
@@ -74,8 +74,8 @@ def preprocessor(source: str) -> List[str]:
                     sys.exit(-1)
 
                 # Nested Macro
-                elif source[cursor] not in operations:
-                    cursor, nested_macro_name = eat_macro_name(cursor)
+                elif source[cursor] == 'ŋ':
+                    cursor, nested_macro_name = eat_macro_name(cursor + 1)
                     macros[macro_name].extend(macros[nested_macro_name])
 
                 # Normal Operation
@@ -84,8 +84,8 @@ def preprocessor(source: str) -> List[str]:
                     cursor += 1
 
         # Macro as Operation
-        elif source[cursor] not in operations:
-            cursor, macro_name = eat_macro_name(cursor)
+        elif source[cursor] == 'ŋ':
+            cursor, macro_name = eat_macro_name(cursor + 1)
             tokens.extend(macros[macro_name])
 
         # Normal Operation
@@ -163,6 +163,5 @@ if __name__ == "__main__":
 
     source = source.read()
     tokens = preprocessor(source)
-    print(tokens)
     heap = interpreter(tokens)
     print(heap)
