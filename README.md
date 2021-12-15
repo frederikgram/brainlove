@@ -6,6 +6,6 @@ Backwards compatible Brainfuck extension
 python3 interpreter.py [sourcefile]
 ```
 ## Examples
-The [examples/](https://github.com/frederikgram/brainlove/examples) directory contains a few examples of both brainlove and brainfuck applications,
+The [examples/](https://github.com/frederikgram/brainlove/tree/master/examples) directory contains a few examples of both brainlove and brainfuck applications,
 examples of the extended languages features are showcased in the former.
 
