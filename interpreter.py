@@ -1,4 +1,4 @@
-""" Brainfuck interpreter """
+""" Brain(fuck|love) interpreter """
 
 import sys
 from collections import defaultdict
@@ -15,7 +15,7 @@ macros: Dict[str, List[str]] = defaultdict(list)
 # the source file, we skip over them as to
 # keep the original position in the file for
 # debugging / logging purposes
-ignores: List[str] = ["\n", " ", ":", ""]
+ignores: List[str] = ['\n', ' ', ':', '']
 
 # Valid Brain(fuck/love) operations
 operations: List[str] = ["<", ">", "+", "-", ".", ",", "[", "]"]
@@ -24,10 +24,11 @@ operations: List[str] = ["<", ">", "+", "-", ".", ",", "[", "]"]
 macro_operations: List[str] = ["%", "#", ":"]
 
 
-def lexer(source: str) -> List[str]:
+def preprocessor(source: str) -> List[str]:
     """Given a source input, convert it to a
     list of valid Brainlove tokens, filling in
-    macro definitions automatically"""
+    macro definitions automatically
+    """
 
     tokens: List[str] = list()
 
@@ -157,11 +158,11 @@ if __name__ == "__main__":
     try:
         source = open(sys.argv[1], "r")
     except FileNotFoundError:
-        print(f"Brainfuck source file '{sys.argv[1]}' could not be found")
+        print(f"Brain(fuck|love) source file '{sys.argv[1]}' could not be found")
         sys.exit(-1)
 
     source = source.read()
-    tokens = lexer(source)
+    tokens = preprocessor(source)
     print(tokens)
     heap = interpreter(tokens)
     print(heap)
