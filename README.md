@@ -1,5 +1,5 @@
 # Brainlove
-Backwards compatible Brainfuck extension
+Backwards compatible Brainfuck extension. Currently supports Macros (Functions) using horribly annoying syntax, as to keep with the spirit of brainfuck.
 
 ## Usage
 ```
