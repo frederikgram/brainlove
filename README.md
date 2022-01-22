@@ -21,6 +21,7 @@ to utilize the macro-feature of Brainlove, the following syntax must be used:
 Nested macros _are_ supported, meaning that the definition would be a valid macro:
 ```brainfuck
 łsub10%----------#
+
 łsub30%
 ŋsub10ð
 ŋsub10ð
