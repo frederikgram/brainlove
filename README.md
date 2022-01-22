@@ -8,9 +8,13 @@ As with normal Brainfuck files, the oprations:
 `< > + - , . \[ \]` are all supported.
 
 to utilize the macro-feature of Brainlove, the following syntax must be used:
+
 `ł` is used to define the start of a macro, this should be followed by any `[a-Z]+[a-zA-Z0-9]*` identifier.
+
 `%` is used to mark the end of said identifier
+
 `#` marks the end of the code the macro contains
+
 `ŋmyfunctionNameð` here shows that to call a macro, one must prefix and suffix the function identifier with `ŋ` and `ð` respectively
 
 
