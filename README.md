@@ -4,7 +4,7 @@ Backwards compatible Brainfuck extension. Currently supports Macros (Functions) 
 :speech_balloon: This project is not optimized, condensed or follows any proper styleguide - it doesn't matter, it's a one-off project.
 
 ## Syntax
-As with normal Brainfuck files, the oprations:
+As with normal Brainfuck files, the operations:
 `< > + - , . \[ \]` are all supported.
 
 to utilize the macro-feature of Brainlove, the following syntax must be used:
