@@ -18,7 +18,7 @@ to utilize the macro-feature of Brainlove, the following syntax must be used:
 - `ŋmyfunctionNameð` here shows that to call a macro, one must prefix and suffix the function identifier with `ŋ` and `ð` respectively
 
 
-Nested macros _are_ supported, meaning that the definition:
+Nested macros _are_ supported, meaning that the definition would be a valid macro:
 ```brainfuck
 łsub10%----------#
 łsub30%
@@ -26,7 +26,6 @@ Nested macros _are_ supported, meaning that the definition:
 ŋsub10ð
 ŋsub10ð
 ```
-would be a valid macro.
 
 ## Usage
 ```
