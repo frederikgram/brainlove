@@ -5,7 +5,7 @@ Backwards compatible Brainfuck extension. Currently supports Macros (Functions) 
 
 ## Syntax
 As with normal Brainfuck files, the operations:
-`< > + - , . \[ \]` are all supported.
+`< > + - , . [ ]` are all supported.
 
 to utilize the macro-feature of Brainlove, the following syntax must be used:
 
